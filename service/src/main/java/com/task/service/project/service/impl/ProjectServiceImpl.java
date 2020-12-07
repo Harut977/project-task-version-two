@@ -1,10 +1,11 @@
 package com.task.service.project.service.impl;
 
-
-import com.task.service.exception.models.NotFoundException;
 import com.task.api.base.response.AllBaseResponse;
 import com.task.api.project.request.ProjectRequest;
 import com.task.api.project.response.ProjectResponse;
+import com.task.service.base.error.ExceptionMessages;
+import com.task.service.exception.models.NotFoundException;
+import com.task.service.exception.models.NotReadException;
 import com.task.service.project.entity.ProjectEntity;
 import com.task.service.project.mapper.ProjectMapper;
 import com.task.service.project.repository.ProjectRepository;
@@ -31,72 +32,88 @@ public class ProjectServiceImpl implements ProjectService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
     @Override
-    public ProjectResponse addProject(ProjectRequest requests) {
+    public ProjectResponse addProject(final ProjectRequest requests) {
         ProjectEntity entity =
                 projectMapper.fromProjectRequestToProjectEntity(requests);
         try {
             entity = projectRepository.save(entity);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.warn(
+                    ExceptionMessages.PROJECT_NOT_CREATED.getMessage() + "->"
+                            + e.getMessage());
+            throw new
+                    NotReadException(
+                    ExceptionMessages.PROJECT_NOT_CREATED.getMessage(),
+                    HttpStatus.BAD_REQUEST);
         }
         return projectMapper.fromProjectEntityToProjectResponse(entity);
     }
 
     @Override
     @SneakyThrows
-    public boolean updateProjectById(Long id, ProjectRequest requests) {
+    public boolean updateProjectById(final Long id, final ProjectRequest requests) {
         if (!projectRepository.existsById(id)) {
-            throw new NotFoundException("Project not found with this id = " + id, HttpStatus.BAD_REQUEST);
+            throw new NotFoundException(
+                    ExceptionMessages.PROJECT_NOT_FOUND.getMessage() + id,
+                    HttpStatus.BAD_REQUEST);
         }
-
         try {
-            projectRepository.updateProjectNative(id, requests.getTitle(), requests.getStatus());
-
+            projectRepository
+                    .updateProjectNative(id, requests.getTitle(), requests.getStatus());
+            return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            LOGGER.warn(
+                    ExceptionMessages.PROJECT_NOT_UPDATED.getMessage() + "->"
+                            + e.getMessage());
+            throw new
+                    NotReadException(
+                    ExceptionMessages.PROJECT_NOT_UPDATED.getMessage(),
+                    HttpStatus.BAD_REQUEST);
         }
-
-        return true;
-
     }
 
     @Override
     @SneakyThrows
-    public ProjectResponse getProjectById(Long id) {
+    public ProjectResponse getProjectById(final Long id) {
         ProjectEntity entity = projectRepository
                 .findById(id)
                 .orElseThrow(() ->
-                        new NotFoundException("Project not found with this id = "
-                                + id, HttpStatus.BAD_REQUEST));
+                        new NotFoundException(
+                                ExceptionMessages.PROJECT_NOT_FOUND.getMessage()
+                                        + id, HttpStatus.BAD_REQUEST));
         return projectMapper.fromProjectEntityToProjectResponse(entity);
     }
 
     @Override
     @SneakyThrows
-    public boolean deletedProjectById(Long id) {
+    public boolean deletedProjectById(final Long id) {
         if (!projectRepository.existsById(id)) {
-            throw new NotFoundException("Project not found with this id = "
+            throw new NotFoundException(ExceptionMessages.PROJECT_NOT_FOUND.getMessage()
                     + id, HttpStatus.BAD_REQUEST);
         }
         try {
             projectRepository.deleteById(id);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.warn(
+                    ExceptionMessages.PROJECT_NOT_DELETED.getMessage() + "->"
+                            + e.getMessage());
+            throw new
+                    NotReadException(
+                    ExceptionMessages.PROJECT_NOT_UPDATED.getMessage(),
+                    HttpStatus.BAD_REQUEST);
         }
-        return false;
     }
 
     @Override
     public AllBaseResponse<ProjectResponse> getAllProjects(
-            Integer pageNumber,
-            int status,
-            int pageSize,
-            String title,
-            String sortBy,
-            String sortOrder) {
+            final Integer pageNumber,
+            final int status,
+            final int pageSize,
+            final String title,
+            final String sortBy,
+            final String sortOrder) {
 
         AllBaseResponse<ProjectResponse> allProjects = new AllBaseResponse<>();
         List<ProjectEntity> projectEntities;
@@ -116,7 +133,8 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         allProjects.setCount(count);
-        allProjects.setObjects(projectMapper.fromProjectEntityListToProjectResponseList(projectEntities));
+        allProjects.setObjects(projectMapper
+                .fromProjectEntityListToProjectResponseList(projectEntities));
 
         return allProjects;
 

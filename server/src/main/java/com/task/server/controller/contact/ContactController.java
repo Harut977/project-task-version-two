@@ -5,6 +5,7 @@ import com.task.api.base.response.BaseResponse;
 import com.task.api.contact.ContactApi;
 import com.task.api.contact.request.ContactRequest;
 import com.task.api.contact.response.ContactResponse;
+import com.task.service.base.response.ResponseMessages;
 import com.task.service.contact.service.ContactService;
 import com.task.service.validator.RequestFieldsValidator;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +21,13 @@ import javax.validation.constraints.Min;
 @RequiredArgsConstructor
 public class ContactController implements ContactApi {
 
-
     private final ContactService contactService;
 
     private final RequestFieldsValidator validator;
 
     @Override
     public ResponseEntity<BaseResponse<ContactResponse>>
-    addContact(Long id, @Valid ContactRequest request, Errors errors) {
+    addContact(final Long id, @Valid final ContactRequest request, Errors errors) {
         validator.validate(request);
 
         validator.validate(errors);
@@ -35,20 +35,22 @@ public class ContactController implements ContactApi {
         ContactResponse contactResponse = contactService.addContact(id, request);
 
         BaseResponse<ContactResponse> response =
-                new BaseResponse<>(true, "ok", contactResponse);
+                new BaseResponse<>(true,
+                        ResponseMessages.CREATED.getMessage(), contactResponse);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<BaseResponse<Boolean>> updateContactById(Long id, @Valid ContactRequest request, Errors errors) {
+    public ResponseEntity<BaseResponse<Boolean>> updateContactById(
+            final Long id, @Valid final ContactRequest request, Errors errors) {
         validator.validate(request);
 
         validator.validate(errors);
         String updatedMessage;
         boolean updated = contactService.updateContactById(id, request);
-        updatedMessage = (updated) ? "Contact updated successfully"
-                : "Contact not updated";
+        updatedMessage = (updated) ? ResponseMessages.UPDATED.getMessage()
+                : ResponseMessages.NOT_UPDATED.getMessage();
 
         BaseResponse<Boolean> response =
                 new BaseResponse<>(updated, updatedMessage, updated);
@@ -57,22 +59,24 @@ public class ContactController implements ContactApi {
     }
 
     @Override
-    public ResponseEntity<BaseResponse<ContactResponse>> getContactById(Long id) {
+    public ResponseEntity<BaseResponse<ContactResponse>> getContactById(final Long id) {
         ContactResponse contactResponse = contactService.getContactById(id);
 
         BaseResponse<ContactResponse> response =
-                new BaseResponse<>(true, "ok", contactResponse);
+                new BaseResponse<>(true,
+                        ResponseMessages.GET.getMessage(),
+                        contactResponse);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<BaseResponse<Boolean>> deleteContactById(Long id) {
+    public ResponseEntity<BaseResponse<Boolean>> deleteContactById(final Long id) {
         String deletedMessage;
 
         boolean deleted = contactService.deleteContactById(id);
-        deletedMessage = (deleted) ? "Contact deleted successfully"
-                : "Contact not deleted";
+        deletedMessage = (deleted) ? ResponseMessages.DELETED.getMessage()
+                : ResponseMessages.NOT_DELETED.getMessage();
 
         BaseResponse<Boolean> response =
                 new BaseResponse<>(deleted, deletedMessage, deleted);
@@ -82,14 +86,16 @@ public class ContactController implements ContactApi {
 
     @Override
     public ResponseEntity<BaseResponse<AllBaseResponse<ContactResponse>>>
-    getAllContacts(@Min(value = 0, message = "page number has to be more than or equal to 0") Integer pageNumber,
-                   @Min(value = 0, message = "page size has to be more than or equal to 0") int pageSize,
-                   Long projectId, String sortBy, String sortOrder) {
+    getAllContacts(@Min(value = 0, message = "page number has to be more than or equal to 0") final Integer pageNumber,
+                   @Min(value = 0, message = "page size has to be more than or equal to 0") final int pageSize,
+                   final Long projectId,
+                   final String sortBy,
+                   final String sortOrder) {
         AllBaseResponse<ContactResponse> projectResponses = contactService
                 .getAllContacts(pageNumber, pageSize, projectId, sortBy, sortOrder);
 
         BaseResponse<AllBaseResponse<ContactResponse>> response =
-                new BaseResponse<>(true, "ok", projectResponses);
+                new BaseResponse<>(true, ResponseMessages.GET.getMessage(), projectResponses);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

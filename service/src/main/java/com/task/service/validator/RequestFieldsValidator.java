@@ -1,18 +1,13 @@
 package com.task.service.validator;
 
-
-
 import com.task.service.exception.handler.ErrorFieldResponse;
 import com.task.service.exception.handler.ValidationError;
 import com.task.service.exception.models.BaseException;
-
-
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Component
 public class RequestFieldsValidator {

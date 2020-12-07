@@ -1,13 +1,11 @@
 package com.task.service.project.repository;
 
-import com.task.api.contact.response.ContactResponse;
 import com.task.service.project.entity.ProjectEntity;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import javax.transaction.Transactional;
 import java.util.List;
 

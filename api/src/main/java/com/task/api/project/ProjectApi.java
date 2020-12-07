@@ -1,6 +1,5 @@
 package com.task.api.project;
 
-
 import com.task.api.base.response.AllBaseResponse;
 import com.task.api.base.response.BaseResponse;
 import com.task.api.project.request.ProjectRequest;
@@ -46,7 +45,7 @@ public interface ProjectApi {
                    @Min(value = -1, message = "status has to be more than or equal to -1")
                            int status,
                    @RequestParam(name = "pageSize", defaultValue = "10")
-                   @Min(value = 0, message = "page size has to be more than or equal to 0")
+                   @Min(value = 1, message = "page size has to be more than or equal to 1")
                            int pageSize,
                    @RequestParam(name = "title", defaultValue = "") String title,
                    @RequestParam(name = "sortBy", defaultValue = "id") String sortBy,

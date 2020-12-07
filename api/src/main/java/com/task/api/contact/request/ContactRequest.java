@@ -17,7 +17,7 @@ public class ContactRequest {
     @NotBlank(message = "Contact should not be blank")
     private String contact;
 
-    @Email(message = "In not email")
+    @Email(message = "Is not email")
     private String email;
 
     private String phone;

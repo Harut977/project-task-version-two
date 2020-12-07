@@ -1,13 +1,11 @@
 package com.task.service.contact.repository;
 
-import com.task.api.contact.response.ContactResponse;
 import com.task.service.contact.entity.ContactEntity;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -24,5 +22,4 @@ public interface ContactRepository extends JpaRepository<ContactEntity, Long> {
 
     @Query("SELECT COUNT(e) FROM ContactEntity e WHERE  e.id = ?1 ")
     long countByIdNative(Long projectId);
-
 }

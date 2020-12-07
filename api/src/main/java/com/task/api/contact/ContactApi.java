@@ -4,9 +4,9 @@ import com.task.api.base.response.AllBaseResponse;
 import com.task.api.base.response.BaseResponse;
 import com.task.api.contact.request.ContactRequest;
 import com.task.api.contact.response.ContactResponse;
-import com.task.api.project.response.ProjectResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
+@Validated
 @RequestMapping("/contact")
 public interface ContactApi {
 
@@ -45,7 +46,7 @@ public interface ContactApi {
     getAllContacts(@RequestParam(name = "pageNumber", defaultValue = "0")
                    @Min(value = 0, message = "page number has to be more than or equal to 0") Integer pageNumber,
                    @RequestParam(name = "pageSize", defaultValue = "10")
-                   @Min(value = 0, message = "page size has to be more than or equal to 0")
+                   @Min(value = 1, message = "page size has to be more than or equal to 1")
                            int pageSize,
                    @RequestParam(name = "id", defaultValue = "") Long projectId,
                    @RequestParam(name = "sortBy", defaultValue = "id") String sortBy,

@@ -1,6 +1,6 @@
 package com.task.service.contact.entity;
 
-import com.task.service.base.BaseEntity;
+import com.task.service.base.entity.BaseEntity;
 import com.task.service.project.entity.ProjectEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

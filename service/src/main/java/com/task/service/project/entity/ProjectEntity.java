@@ -1,12 +1,14 @@
 package com.task.service.project.entity;
 
-import com.task.service.base.BaseEntity;
+import com.task.service.base.entity.BaseEntity;
 import com.task.service.contact.entity.ContactEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -26,6 +28,7 @@ public class ProjectEntity extends BaseEntity {
 
     private int status;
 
+    @Cascade(CascadeType.DELETE)
     @OneToMany(mappedBy = "projectEntity")
     private List<ContactEntity> contacts;
 }

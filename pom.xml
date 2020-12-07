@@ -29,7 +29,6 @@
         <module>service</module>
     </modules>
 
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -55,7 +54,6 @@
             <version>${jakarta.validation-api.version}</version>
         </dependency>
     </dependencies>
-
 
     <build>
         <plugins>

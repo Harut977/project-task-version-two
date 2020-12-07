@@ -1,4 +1,4 @@
-package com.task.service.base;
+package com.task.service.base.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
